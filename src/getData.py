@@ -24,7 +24,7 @@ for index, symbol in enumerate( symbols ):
         print symbol
         print name
         data = web.DataReader(symbol, 'yahoo', start, end)
-        data.to_csv( "data/" + name + ".csv" )
+        data.to_csv( "data/" + symbol + ".csv" )
     except IOError:
         print( "FAILED PARSING " + symbol )
         pass
