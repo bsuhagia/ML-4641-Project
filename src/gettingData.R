@@ -4,7 +4,7 @@
 require(quantmod)
 
 # replace the directory to where your list file is located
-stock_list <- read.csv("Desktop/sp500-symbol-list.txt",header = F, stringsAsFactors = F)
+stock_list <- read.csv("~/Documents/CS4641/project/src/constituents.csv",header = T, stringsAsFactors = F)
 
 # print the list of S&P 500 tickers
 stock_list
@@ -23,6 +23,10 @@ for (i in 1:nrstocks) {
     }
     cat("(",i,"/",nrstocks,")","Downloading",stock_list[i,1],"\n")
     getSymbols(stock_list[i,1], env = stock_data, src="yahoo",from="2010-06-10", to="2015-06-10")
+    stock_data[[stock_list[i,1]]]
+    stock_name = stock_data[[stock_list[i,2]]]
+    stock_name = gsub(" ", "", stock_name, fixed = TRUE)
+    write.csv(stock_data[stock_list[i,1]], file=stock_name + ".csv")    
   }
   , error = function(e) print (e))
 }
@@ -36,3 +40,4 @@ write.csv(stock_data$AAPL, file="apple.csv")
 ##########################################################################
 # similary we would have to manually write csv files for all 500 stocks. 
 # If we divide that, it wont take longer that half - one hour per person.
+
