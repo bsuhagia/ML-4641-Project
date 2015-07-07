@@ -4,7 +4,7 @@
 require(quantmod)
 
 # replace the directory to where your list file is located
-stock_list <- read.csv("~/Documents/CS4641/project/src/constituents.csv",header = T, stringsAsFactors = F)
+stock_list <- read.csv("sp500-symbol-list.txt",header = F, stringsAsFactors = F)
 
 # print the list of S&P 500 tickers
 stock_list
@@ -34,7 +34,7 @@ for (i in 1:nrstocks) {
 #print data for Apple stock
 stock_data$AAPL
 #save data to a csv file for further use
-write.csv(stock_data$AAPL, file="apple.csv")
+write.csv(stock_data$AAPL, file="AAPL.csv")
 
 
 ##########################################################################
