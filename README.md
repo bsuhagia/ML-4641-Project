@@ -3,22 +3,27 @@
 ## Week of 6/7
 * Change topic from sentiment analysis to stock market clustering and predictions.
 * Create informal project proposal.
+
 ## Week of 6/14
 * Determine as a group which stocks we would like to perform our analysis on. Currently, we are looking forward to analyzing SP500 stocks.
 * Determine as a group what time periods we would like to look at in order to avoid outlier years.
 * Get all group members familiar with scikit-learn and R through individual exploration.
 * Gather all data from the stocks and convert into a format needed for analysis
+
 ## Week of 6/21
 * Produce visualization graphics using dummy data
 * Create and test different models created using different algorithms
+
 ## Week of 6/28
 * Create a visualization that demonstrates our results
 * If we get good results play with the data and attempt to do predictions on stock prices given related stocks. This would be a form of a supervised learning done by altering the data to be given stock prices of the cluster and have to predict what our stock will be.
 * Begin work on the project progress report.
+
 ## Week of 7/5
 * Finish project progress report.
 * Attempt to use alternative algorithms to cluster the data.
 * Begin work on final project report.
+
 ## Week of 7/12
 * Finish final project report.
 * Begin working on the project presentation.
