@@ -4,7 +4,7 @@
 require(quantmod)
 
 # replace the directory to where your list file is located
-stock_list <- read.csv("Desktop/sp500-symbol-list.txt",header = F, stringsAsFactors = F)
+stock_list <- read.csv("sp500-symbol-list.txt",header = F, stringsAsFactors = F)
 
 # print the list of S&P 500 tickers
 stock_list
@@ -30,9 +30,8 @@ for (i in 1:nrstocks) {
 #print data for Apple stock
 stock_data$AAPL
 #save data to a csv file for further use
-write.csv(stock_data$AAPL, file="apple.csv")
+write.csv(stock_data$AAPL, file="AAPL.csv")
 
-
-##########################################################################
-# similary we would have to manually write csv files for all 500 stocks. 
+##############################################################
+# similary we would have to manually write csv files for all 500 stocks.
 # If we divide that, it wont take longer that half - one hour per person.
