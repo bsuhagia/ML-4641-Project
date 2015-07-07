@@ -58,3 +58,15 @@
 
 ### Task 6: Create the Presentation
 * Use charts and graphs to present the trends found in our data and analysis results
+
+# Task Checklist
+- [x] Get the data
+- [ ] Modify the data for analysis
+- [ ] Apply simple kmeans methods
+- [ ] Apply hierarchical clustering
+- [ ] Apply EM
+- [ ] Apply a new method based on research
+- [ ] Test and Compare methods
+- [ ] Produce visualizations
+- [ ] Create Final Report
+- [ ] Crete presentation
