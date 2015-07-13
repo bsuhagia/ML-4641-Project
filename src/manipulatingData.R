@@ -1,7 +1,7 @@
-file_list <- list.files("~/Dropbox/Summer 2015/ML/ML-4641-Project/src/data/")
+file_list <- list.files("1yrdata/")
 
 for(i in 1:length(file_list)) {
-  filepath <- file.path("~/Dropbox/Summer 2015/ML/ML-4641-Project/src/data/", paste(file_list[i],sep=""))
+  filepath <- file.path("1yrdata/", paste(file_list[i],sep=""))
 #   datafile <- read.csv(filepath)
   
   datafile <- read.csv(filepath)
@@ -18,7 +18,6 @@ for(i in 1:length(file_list)) {
   datafile$low <- NULL
   ticker <- gsub("\\..*","",file_list[i])
   datafile$ticker <- ticker
-  temp <- merge(temp, datafile)
   write.csv(datafile, file=file_list[i])
   datafile<- NULL
 }
