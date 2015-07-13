@@ -1,6 +1,6 @@
 # Task Checklist
 - [x] Get the data
-- [ ] Modify the data for analysis
+- [x] Modify the data for analysis
 - [ ] Produce basic plots/graphs for understanding the data
 - [ ] Apply simple kmeans methods
 - [ ] Apply hierarchical clustering
