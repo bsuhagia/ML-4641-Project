@@ -23,8 +23,14 @@ for index, symbol in enumerate( symbols ):
     try:
         print symbol
         print name
+        print()
         data = web.DataReader(symbol, 'yahoo', start, end)
-        data.to_csv( "data/" + name + ".csv" )
+        percent_diff = []
+        a = list(data.columns.values)
+        averages = data.mean()
+        adj_average = averages['Adj Close']
+        data = ( data.assign(percent_from_mean = ( data['Adj Close'] - adj_average ) / adj_average * 100 ))
+        data.to_csv( "data_for_graph/" + symbol + ".csv" )
     except IOError:
         print( "FAILED PARSING " + symbol )
         pass
