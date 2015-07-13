@@ -15,7 +15,7 @@ import pandas as pd
 
 np.random.seed(42)
 
-num_stocks = 420;
+num_stocks = 15;
 max_clusters = 3;
 
 
@@ -37,7 +37,7 @@ for line in f.readlines():
 	i+=1
 
 digits = test2[:, 1:]
-data =  digits[:, [0,1]] # 0 = % change, 1 = variation, 2 = adjusted
+data =  digits[:, [0,2]] # 0 = % change, 1 = variation, 2 = adjusted
 target = digits[:, 3]
 
 n_samples, n_features = digits.shape
