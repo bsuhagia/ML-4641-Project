@@ -3,6 +3,7 @@ print(__doc__)
 from time import time
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.colors as color
 import urllib
 
 from sklearn import metrics
@@ -15,7 +16,7 @@ import pandas as pd
 
 np.random.seed(42)
 
-num_stocks = 15;
+num_stocks = 420;
 max_clusters = 3;
 
 
@@ -23,6 +24,7 @@ f = open('sp500-symbol-list.txt')
 test = pd.read_csv("new1yrdata/A.csv")
 test2 = np.array(test)
 i = 1
+l = [[test2[:, [1,2]]]];
 for line in f.readlines():
 	if i >= num_stocks:
 		break
@@ -33,11 +35,14 @@ for line in f.readlines():
 	temp = pd.read_csv("new1yrdata/" + line + ".csv")
 	temp = np.array(temp)
 	temp2 = temp[2:, :]
+	l.append(temp2[:, [1,2]])
 	test2 = np.concatenate((test2, temp2))
 	i+=1
 
+
+
 digits = test2[:, 1:]
-data =  digits[:, [0,2]] # 0 = % change, 1 = variation, 2 = adjusted
+data =  digits[:, [0,1]] # 0 = % change, 1 = variation, 2 = adjusted
 target = digits[:, 3]
 
 n_samples, n_features = digits.shape
@@ -75,15 +80,23 @@ plt.imshow(Z, interpolation='nearest',
            extent=(xx.min(), xx.max(), yy.min(), yy.max()),
            cmap=plt.cm.Paired,
            aspect='auto', origin='lower')
-
-plt.plot(reduced_data[:, 0], reduced_data[:, 1], 'k.', markersize=2)
+i = 0
+while True:
+    if i >= len(np.unique(target)):
+        break
+    for c in color.cnames:
+        if i >= len(np.unique(target)):
+            break
+        datacluster = np.array(l.pop());
+        plt.plot(datacluster[:, 0], datacluster[:, 1], 'k.', markersize=2, color='k')
+        i += 1
 # Plot the centroids as a white X
 centroids = kmeans.cluster_centers_
 plt.scatter(centroids[:, 0], centroids[:, 1],
             marker='x', s=169, linewidths=3,
             color='w', zorder=10)
 plt.title('K-means clustering (1 year, 420 companies)\n'
-          'Centroids are marked with white cross (2 clusters)')
+          'Centroids are marked with white cross (3 clusters)')
 plt.xlim(x_min, x_max)
 plt.ylim(y_min, y_max)
 plt.xticks(())
