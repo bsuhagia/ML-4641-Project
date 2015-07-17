@@ -1,7 +1,7 @@
-file_list <- list.files("1yrdata/")
+file_list <- list.files("monthlydata/")
 
 for(i in 1:length(file_list)) {
-  filepath <- file.path("1yrdata/", paste(file_list[i],sep=""))
+  filepath <- file.path("monthlydata/", paste(file_list[i],sep=""))
 #   datafile <- read.csv(filepath)
   
   datafile <- read.csv(filepath)
