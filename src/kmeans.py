@@ -8,6 +8,8 @@ import urllib
 
 from sklearn import metrics
 from sklearn.cluster import KMeans
+from sklearn.cluster import MeanShift
+from sklearn.cluster import AffinityPropagation
 from sklearn.datasets import load_digits
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import scale
@@ -18,7 +20,7 @@ import os.path
 np.random.seed(42)
 
 num_stocks = 500
-max_clusters = 4
+max_clusters = 5
 col1 = 1 # 1 = % change, 2 = variation, 3 = adjusted price
 col2 = 2 # "
 folder = "finaldata"
@@ -68,6 +70,8 @@ n_digits = max_clusters #len(np.unique(target))
 
 # run kmeans
 kmeans = KMeans(init='k-means++', n_clusters=n_digits, n_init=10)
+meanshift = MeanShift()
+affprop = AffinityPropagation()
 kmeans.fit(data)
 
 print data.shape
