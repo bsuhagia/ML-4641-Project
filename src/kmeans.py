@@ -18,14 +18,16 @@ import os.path
 np.random.seed(42)
 
 num_stocks = 500
-max_clusters = 3
+max_clusters = 4
 col1 = 1 # 1 = % change, 2 = variation, 3 = adjusted price
 col2 = 2 # "
-folder = "finalmonthlydata"
-onePointPerCompany = True # use True if data is monthly
-chartTitle = 'K-means clustering (1 Year, Daily)\n Centroids are marked with white cross (3 clusters)'
+folder = "finaldata"
+onePointPerCompany = True # Create One point using Mean
+chartTitle = 'K-means clustering (5 Years, Daily)\n Centroids are marked with white cross (5 clusters)'
 xaxisLabel = '% Change'
 yaxisLabel = 'Variation'
+# Step size of the mesh. Decrease to increase the quality of the VQ.
+h = .001     # point in the mesh [x_min, m_max]x[y_min, y_max].
 
 test2 = None
 f = open('sp500-symbol-list.txt')
@@ -35,58 +37,45 @@ for line in f.readlines():
 	if not os.path.exists(folder + "/" + line + ".csv"): # check if file exists
 	    print folder + "/" + line + ".csv Not Found"
 	    continue
-        if test2 is None: # get headers
+        if test2 is None: # setup for first file
             test = pd.read_csv(folder + "/" + line + ".csv")
-            headers = list(test.columns.values)
-            headers = [[headers[1], headers[2]]]
             test2 = np.array(test)
-            target = np.array([test2[0, 4]])
-            test2 = test2[:, [col1,col2]]
-            l = [[np.mean(test2, axis=0)]]
+            target = np.array([test2[0, 4]]) # add ticker to array
+            test2 = test2[:, [col1,col2]] # get only col1 and col2
+            l = [[np.mean(test2, axis=0)]] # add mean to list for plotting
             if onePointPerCompany:
-                test2 = [np.mean(test2, axis=0)]
+                test2 = [np.mean(test2, axis=0)] # calculate mean
             continue
-	if i >= num_stocks:
+	if i >= num_stocks: # for restricting a number of stocks
 		break
 	temp = pd.read_csv(folder + "/" + line + ".csv") # read file
 	temp = np.array(temp)
-        target = np.concatenate((target, [temp[0, 4]]), axis=0)
-	temp2 = temp[:, [col1,col2]] # chop off top row (header) and select rows 1 and 2
-	l.append([np.mean(temp2, axis=0)]) # add to list to color data later
+        target = np.concatenate((target, [temp[0, 4]]), axis=0) # add ticker to target list
+	temp2 = temp[:, [col1,col2]] # get only col1 and col2
+	l.append([np.mean(temp2, axis=0)]) # add mean to list for plotting
 	if onePointPerCompany:
-	   test2 = np.concatenate((test2, [np.mean(temp2, axis=0)]), axis=0) # add to big array for analysis
+	   test2 = np.concatenate((test2, [np.mean(temp2, axis=0)]), axis=0) # calculate mean
 	else:
-	   test2 = np.concatenate((test2, temp2), axis=0)
+	   test2 = np.concatenate((test2, temp2), axis=0) # concat each file into the array
 	i+=1
 
 print target
 
-#digits = test2[:, 1:]
-#data =  digits[:, [0,1]] # 0 = % change, 1 = variation, 2 = adjusted
-#target = digits[:, 3]
 data = test2
-print data
 #n_samples, n_features = data.shape
 n_digits = max_clusters #len(np.unique(target))
 #labels = target
 
-#print("n_digits: %d, \t n_samples %d, \t n_features %d"
-     # % (n_digits, n_samples, n_features))
-      
-###############################################################################
-# Visualize the results on PCA-reduced data
-
+# run kmeans
 kmeans = KMeans(init='k-means++', n_clusters=n_digits, n_init=10)
 kmeans.fit(data)
 
 print data.shape
 
-# Step size of the mesh. Decrease to increase the quality of the VQ.
-h = .02     # point in the mesh [x_min, m_max]x[y_min, y_max].
 
 # Plot the decision boundary. For that, we will assign a color to each
-x_min, x_max = data[:, 0].min() + 1, data[:, 0].max() - 1
-y_min, y_max = data[:, 1].min() + 1, data[:, 1].max() - 1
+x_min, x_max = data[:, 0].min() - 1, data[:, 0].max() + 1
+y_min, y_max = data[:, 1].min() - 1, data[:, 1].max() + 1
 xx, yy = np.meshgrid(np.arange(x_min, x_max, h), np.arange(y_min, y_max, h))
 
 # Obtain labels for each point in mesh. Use last trained model.
@@ -100,8 +89,10 @@ plt.imshow(Z, interpolation='nearest',
            extent=(xx.min(), xx.max(), yy.min(), yy.max()),
            cmap=plt.cm.Paired,
            aspect='auto', origin='lower')
-j = 0
+# plot data used for calculation
 plt.plot(data[:, 0], data[:, 1], 'k.', markersize = 2, color='k')
+# plot one point per stock
+j = 0
 while True:
     if j >= i:
         break
@@ -109,7 +100,8 @@ while True:
         if j >= i:
             break
         datacluster = np.array(l.pop());
-        plt.plot(datacluster[:, 0], datacluster[:, 1], 'k.', markersize=20, color=c)
+        plt.plot(datacluster[:, 0], datacluster[:, 1], 'k.', markersize=5, color='k')
+        # uncomment for labels
         #plt.text(datacluster[:, 0], datacluster[:, 1], target[target.shape[0]-j-1])
         j += 1
 # Plot the centroids as a white X
