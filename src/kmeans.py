@@ -20,12 +20,12 @@ import os.path
 np.random.seed(42)
 
 num_stocks = 500
-max_clusters = 5
+max_clusters = 4
 col1 = 1 # 1 = % change, 2 = variation, 3 = adjusted price
 col2 = 2 # "
 folder = "finaldata"
 onePointPerCompany = True # Create One point using Mean
-chartTitle = 'K-means clustering (5 Years, Daily)\n Centroids are marked with white cross (5 clusters)'
+chartTitle = 'K-means clustering (5 Years, Daily)\n Centroids are marked with white cross (4 clusters)'
 xaxisLabel = '% Change'
 yaxisLabel = 'Variation'
 # Step size of the mesh. Decrease to increase the quality of the VQ.
@@ -94,7 +94,7 @@ plt.imshow(Z, interpolation='nearest',
            cmap=plt.cm.Paired,
            aspect='auto', origin='lower')
 # plot data used for calculation
-plt.plot(data[:, 0], data[:, 1], 'k.', markersize = 2, color='k')
+plt.plot(data[:, 0], data[:, 1], 'k.', markersize = 20, color='k')
 # plot one point per stock
 j = 0
 while True:
