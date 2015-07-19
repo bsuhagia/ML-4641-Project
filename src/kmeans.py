@@ -20,7 +20,7 @@ import os.path
 np.random.seed(42)
 
 num_stocks = 500
-max_clusters = 4
+max_clusters = 7
 col1 = 1 # 1 = % change, 2 = variation, 3 = adjusted price
 col2 = 2 # "
 folder = "finaldata"
@@ -72,7 +72,10 @@ n_digits = max_clusters #len(np.unique(target))
 kmeans = KMeans(init='k-means++', n_clusters=n_digits, n_init=10)
 meanshift = MeanShift()
 affprop = AffinityPropagation()
+
+test = kmeans.fit_predict(data)
 kmeans.fit(data)
+
 
 print data.shape
 
@@ -87,6 +90,9 @@ Z = kmeans.predict(np.c_[xx.ravel(), yy.ravel()])
 
 # Put the result into a color plot
 Z = Z.reshape(xx.shape)
+
+print kmeans.fit_predict(data)
+
 plt.figure(1)
 plt.clf()
 plt.imshow(Z, interpolation='nearest',
@@ -94,20 +100,35 @@ plt.imshow(Z, interpolation='nearest',
            cmap=plt.cm.Paired,
            aspect='auto', origin='lower')
 # plot data used for calculation
-plt.plot(data[:, 0], data[:, 1], 'k.', markersize = 20, color='k')
+plt.plot(data[:, 0], data[:, 1], 'k.', markersize = 1, color='k')
 # plot one point per stock
 j = 0
+
+testcolor = []
+clusterindex = []
+dicttest = {}
+for c in color.cnames:
+    testcolor.append(c)
 while True:
     if j >= i:
         break
     for c in color.cnames:
+        
         if j >= i:
             break
         datacluster = np.array(l.pop());
-        plt.plot(datacluster[:, 0], datacluster[:, 1], 'k.', markersize=5, color='k')
+        ind =  np.where(data==datacluster)
+        save = test[ind[0][0]]
+        clusterindex.append(save)
+        plt.plot(datacluster[:, 0], datacluster[:, 1], 'k.', markersize=10, color=testcolor[clusterindex[len(clusterindex)-1]])
         # uncomment for labels
-        #plt.text(datacluster[:, 0], datacluster[:, 1], target[target.shape[0]-j-1])
+        if save not in dicttest:
+            dicttest[save] = []
+            plt.text(datacluster[:, 0], datacluster[:, 1], 'Cluster #' + str(save), color='w')
+        dicttest[save].append(target[target.shape[0]-j-1])
         j += 1
+for n in dicttest:
+    print 'Cluster #' + str(n) + ': ' + str(dicttest[n])
 # Plot the centroids as a white X
 centroids = kmeans.cluster_centers_
 plt.scatter(centroids[:, 0], centroids[:, 1],
