@@ -13,6 +13,7 @@ from sklearn.cluster import AffinityPropagation
 from sklearn.datasets import load_digits
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import scale
+from collections import Counter
 import pandas as pd
 import os.path
 
@@ -20,14 +21,17 @@ import os.path
 np.random.seed(42)
 
 num_stocks = 500
-max_clusters = 7
+max_clusters = 7 # subtract 2 clusters due to outliers
 col1 = 1 # 1 = % change, 2 = variation, 3 = adjusted price
 col2 = 2 # "
 folder = "finaldata"
+constituents = "constituents.csv"
 onePointPerCompany = True # Create One point using Mean
-chartTitle = 'K-means clustering (5 Years, Daily)\n Centroids are marked with white cross (4 clusters)'
+chartTitle = 'K-means clustering (5 Years, Daily)\n Centroids are marked with white cross (Auto Clusters)'
 xaxisLabel = '% Change'
 yaxisLabel = 'Variation'
+showClusterLabels = True
+showPieCharts = True
 # Step size of the mesh. Decrease to increase the quality of the VQ.
 h = .001     # point in the mesh [x_min, m_max]x[y_min, y_max].
 
@@ -72,9 +76,10 @@ n_digits = max_clusters #len(np.unique(target))
 kmeans = KMeans(init='k-means++', n_clusters=n_digits, n_init=10)
 meanshift = MeanShift()
 affprop = AffinityPropagation()
+method = kmeans
 
-test = kmeans.fit_predict(data)
-kmeans.fit(data)
+test = method.fit_predict(data)
+method.fit(data)
 
 
 print data.shape
@@ -86,12 +91,12 @@ y_min, y_max = data[:, 1].min() - 1, data[:, 1].max() + 1
 xx, yy = np.meshgrid(np.arange(x_min, x_max, h), np.arange(y_min, y_max, h))
 
 # Obtain labels for each point in mesh. Use last trained model.
-Z = kmeans.predict(np.c_[xx.ravel(), yy.ravel()])
+Z = method.predict(np.c_[xx.ravel(), yy.ravel()])
 
 # Put the result into a color plot
 Z = Z.reshape(xx.shape)
 
-print kmeans.fit_predict(data)
+print method.fit_predict(data)
 
 plt.figure(1)
 plt.clf()
@@ -121,24 +126,33 @@ while True:
         save = test[ind[0][0]]
         clusterindex.append(save)
         plt.plot(datacluster[:, 0], datacluster[:, 1], 'k.', markersize=10, color=testcolor[clusterindex[len(clusterindex)-1]])
-        # uncomment for labels
         if save not in dicttest:
             dicttest[save] = []
-            plt.text(datacluster[:, 0], datacluster[:, 1], 'Cluster #' + str(save), color='w')
+            if showClusterLabels:
+                plt.text(datacluster[:, 0], datacluster[:, 1], 'Cluster #' + str(save), color='w')
         dicttest[save].append(target[target.shape[0]-j-1])
         j += 1
 for n in dicttest:
     print 'Cluster #' + str(n) + ': ' + str(dicttest[n])
 # Plot the centroids as a white X
-centroids = kmeans.cluster_centers_
-plt.scatter(centroids[:, 0], centroids[:, 1],
-            marker='x', s=169, linewidths=3,
-            color='w', zorder=10)
+centroids = method.cluster_centers_
 plt.title(chartTitle)
 plt.xlim(x_min, x_max)
 plt.ylim(y_min, y_max)
 plt.xlabel(xaxisLabel)
 plt.ylabel(yaxisLabel)
+
+if showPieCharts:
+    cnst = pd.read_csv(constituents)
+    cnst2 = np.array(cnst)
+    for key in dicttest:
+        names = np.transpose(np.array([dicttest[key]]))
+        counts = Counter(cnst2[np.where(cnst2[:,0]==names[:])[1],2])
+        print 'Cluster #' + str(key) + str(counts)
+        plt.figure(2 + key)
+        plt.title('Cluster #' + str(key))
+        plt.pie([float(v) for v in counts.values()], labels=[str(k) for k in counts],
+            autopct=None)
 
 f.close()
 
