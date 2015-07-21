@@ -16,6 +16,7 @@ from sklearn.preprocessing import scale
 from collections import Counter
 import pandas as pd
 import os.path
+import csv
 
 
 np.random.seed(42)
@@ -153,6 +154,11 @@ if showPieCharts:
         plt.title('Cluster #' + str(key))
         plt.pie([float(v) for v in counts.values()], labels=[str(k) for k in counts],
             autopct=None)
+    
+with open('kmeansTickerClusters5.csv', 'wb') as e:  # Just use 'w' mode in 3.x
+    w = csv.writer(e)
+    for key, value in dicttest.items():
+        w.writerow([key] + value)
 
 f.close()
 
