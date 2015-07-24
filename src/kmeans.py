@@ -77,7 +77,7 @@ n_digits = max_clusters #len(np.unique(target))
 kmeans = KMeans(init='k-means++', n_clusters=n_digits, n_init=10)
 meanshift = MeanShift()
 affprop = AffinityPropagation()
-method = kmeans
+method = meanshift
 
 test = method.fit_predict(data)
 method.fit(data)
@@ -155,7 +155,7 @@ if showPieCharts:
         plt.pie([float(v) for v in counts.values()], labels=[str(k) for k in counts],
             autopct=None)
     
-with open('kmeansTickerClusters5.csv', 'wb') as e:  # Just use 'w' mode in 3.x
+with open('MeanShiftClusters.csv', 'wb') as e:  # Just use 'w' mode in 3.x
     w = csv.writer(e)
     for key, value in dicttest.items():
         w.writerow([key] + value)
