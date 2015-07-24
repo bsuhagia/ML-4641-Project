@@ -10,10 +10,9 @@ def isNan( val ):
     return val != val
 
 constituents = pd.read_csv( 'constituents_with_deletions.csv' )
-clusters = pd.read_csv( 'test_cluster.csv' )
+clusters = pd.read_csv( 'kmeansTickerClusters5.csv' )
 
 pprint( clusters )
-column0 = clusters['Cluster 3']
 
 bad_symbols = []
 
