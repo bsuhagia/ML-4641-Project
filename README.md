@@ -1,15 +1,15 @@
 # Task Checklist
 - [x] Get the data
 - [x] Modify the data for analysis
-- [ ] Produce basic plots/graphs for understanding the data
-- [ ] Apply simple kmeans methods
+- [x] Produce basic plots/graphs for understanding the data
+- [x] Apply simple kmeans methods
 - [ ] Apply hierarchical clustering
-- [ ] Apply EM
+- [x] Apply EM
 - [ ] Apply a new method based on research
-- [ ] Test and Compare methods
-- [ ] Produce visualizations
-- [ ] Create Final Report
-- [ ] Crete presentation
+- [x] Test and Compare methods
+- [x] Produce visualizations
+- [x] Create Final Report
+- [x] Crete presentation
 
 # Project Plan
 
