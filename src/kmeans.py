@@ -22,7 +22,7 @@ import csv
 np.random.seed(42)
 
 num_stocks = 500
-max_clusters = 7 # subtract 2 clusters due to outliers
+max_clusters = 30 # subtract 2 clusters due to outliers
 col1 = 1 # 1 = % change, 2 = variation, 3 = adjusted price
 col2 = 2 # "
 folder = "finaldata"
@@ -77,7 +77,7 @@ n_digits = max_clusters #len(np.unique(target))
 kmeans = KMeans(init='k-means++', n_clusters=n_digits, n_init=10)
 meanshift = MeanShift()
 affprop = AffinityPropagation()
-method = meanshift
+method = kmeans
 
 test = method.fit_predict(data)
 method.fit(data)
